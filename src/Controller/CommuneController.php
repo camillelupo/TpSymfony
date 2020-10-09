@@ -49,9 +49,11 @@ class CommuneController extends AbstractController
         }
         return JsonResponse::fromJsonString($this->serializeJson($communeRepository->findBy($filter)), Response::HTTP_OK);
     }
+
     /**
-     * @Route("/commune/create", name="commune_create", methods={"POST"})
+     * @Route("api/commune/create", name="commune_create", methods={"POST"})
      * @param Request $request
+     * @param CommuneRepository $communeRepository
      * @return JsonResponse
      */
     public function communeCreate(Request $request, CommuneRepository $communeRepository)
@@ -81,7 +83,7 @@ class CommuneController extends AbstractController
     }
 
     /**
-     * @Route("/commune/update", name="commune_create", methods={"PUT"})
+     * @Route("api/commune/update", name="commune_update", methods={"PUT"})
      * @param Request $request
      * @return JsonResponse
      */
