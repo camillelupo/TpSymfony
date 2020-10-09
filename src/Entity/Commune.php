@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\CommuneRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CommuneRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Commune
 {
@@ -46,6 +48,10 @@ class Commune
      * @ORM\Column(type="integer")
      */
     private $population;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
 
     public function getId(): ?int
     {
@@ -64,36 +70,36 @@ class Commune
         return $this;
     }
 
-    public function getCode(): ?int
+    public function getCode(): ?string
     {
         return $this->code;
     }
 
-    public function setCode(int $code): self
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
         return $this;
     }
 
-    public function getCodeDepartement(): ?int
+    public function getCodeDepartement(): ?string
     {
         return $this->codeDepartement;
     }
 
-    public function setCodeDepartement(int $codeDepartement): self
+    public function setCodeDepartement(string $codeDepartement): self
     {
         $this->codeDepartement = $codeDepartement;
 
         return $this;
     }
 
-    public function getCodeRegion(): ?int
+    public function getCodeRegion(): ?string
     {
         return $this->codeRegion;
     }
 
-    public function setCodeRegion(int $codeRegion): self
+    public function setCodeRegion(string $codeRegion): self
     {
         $this->codeRegion = $codeRegion;
 
@@ -120,6 +126,27 @@ class Commune
     public function setPopulation(int $population): self
     {
         $this->population = $population;
+
+        return $this;
+    }
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function setSlugValue(){
+        $nom = $this->getNom();
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($nom,'-');
+        $this->slug='tot';
+    }
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
